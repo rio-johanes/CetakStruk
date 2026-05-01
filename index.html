@@ -4,608 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Generator Struk Kasir</title>
-
-    <!-- ==================== CSS STYLING ==================== -->
-    <style>
-        /* --- Reset & Base --- */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        :root {
-            --bg-body: #e8ecf1;
-            --bg-panel: #ffffff;
-            --bg-input: #f7f8fa;
-            --text-dark: #1a1d23;
-            --text-mid: #4a4f5a;
-            --text-light: #6b7280;
-            --border: #dde1e7;
-            --accent: #2563eb;
-            --accent-hover: #1d4ed8;
-            --danger: #ef4444;
-            --danger-hover: #dc2626;
-            --success: #10b981;
-            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
-            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
-            --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.12);
-            --radius: 8px;
-            --radius-sm: 5px;
-            --font-mono: 'Courier New', 'Roboto Mono', 'Consolas', monospace;
-        }
-
-        body {
-            font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
-            background: var(--bg-body);
-            color: var(--text-dark);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 16px;
-            line-height: 1.5;
-        }
-
-        /* --- Main Container (Split Screen) --- */
-        .app-container {
-            display: flex;
-            width: 100%;
-            max-width: 1300px;
-            min-height: 88vh;
-            background: var(--bg-panel);
-            border-radius: 14px;
-            box-shadow: var(--shadow-lg);
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
-
-        /* --- LEFT PANEL: Form Input --- */
-        .panel-input {
-            flex: 1 1 55%;
-            padding: 24px 28px;
-            overflow-y: auto;
-            max-height: 88vh;
-            background: #fafbfc;
-            border-right: 1px solid var(--border);
-            display: flex;
-            flex-direction: column;
-            gap: 18px;
-        }
-
-        .panel-input h2 {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: var(--text-dark);
-            margin-bottom: 2px;
-            letter-spacing: -0.3px;
-        }
-        .panel-input .subtitle {
-            font-size: 0.82rem;
-            color: var(--text-light);
-            margin-bottom: 4px;
-        }
-
-        /* Section card */
-        .section-card {
-            background: #fff;
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 16px 18px;
-            box-shadow: var(--shadow-sm);
-        }
-        .section-card h3 {
-            font-size: 0.9rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: var(--text-mid);
-            margin-bottom: 10px;
-            padding-bottom: 8px;
-            border-bottom: 2px solid #e5e7eb;
-        }
-
-        /* Form rows */
-        .form-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 8px;
-        }
-        .form-row:last-child {
-            margin-bottom: 0;
-        }
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            flex: 1 1 140px;
-            min-width: 120px;
-        }
-        .form-group label {
-            font-size: 0.78rem;
-            font-weight: 600;
-            color: var(--text-mid);
-            margin-bottom: 3px;
-        }
-        .form-group input,
-        .form-group select {
-            padding: 9px 11px;
-            font-size: 0.88rem;
-            border: 1.5px solid var(--border);
-            border-radius: var(--radius-sm);
-            background: var(--bg-input);
-            color: var(--text-dark);
-            transition: border 0.2s, box-shadow 0.2s;
-            font-family: inherit;
-            width: 100%;
-        }
-        .form-group input:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.08);
-            background: #fff;
-        }
-        .form-group input[readonly] {
-            background: #eef1f5;
-            color: #374151;
-            font-weight: 600;
-            cursor: default;
-            border-style: dashed;
-        }
-
-        /* Buttons */
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-            padding: 9px 16px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            border: none;
-            border-radius: var(--radius-sm);
-            cursor: pointer;
-            transition: all 0.2s;
-            white-space: nowrap;
-            letter-spacing: 0.2px;
-            font-family: inherit;
-        }
-        .btn-primary {
-            background: var(--accent);
-            color: #fff;
-        }
-        .btn-primary:hover {
-            background: var(--accent-hover);
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
-        }
-        .btn-outline {
-            background: #fff;
-            color: var(--accent);
-            border: 1.5px solid var(--accent);
-        }
-        .btn-outline:hover {
-            background: #eff6ff;
-        }
-        .btn-danger {
-            background: #fff;
-            color: var(--danger);
-            border: 1.5px solid var(--danger);
-            padding: 4px 10px;
-            font-size: 0.75rem;
-            border-radius: 4px;
-        }
-        .btn-danger:hover {
-            background: #fef2f2;
-            border-color: var(--danger-hover);
-            color: var(--danger-hover);
-        }
-        .btn-sm {
-            padding: 6px 12px;
-            font-size: 0.78rem;
-        }
-        .btn-success {
-            background: var(--success);
-            color: #fff;
-        }
-        .btn-success:hover {
-            background: #059669;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
-        }
-
-        /* Template-specific fields */
-        .template-fields {
-            display: none;
-            animation: fadeSlideIn 0.3s ease;
-        }
-        .template-fields.active {
-            display: block;
-        }
-        @keyframes fadeSlideIn {
-            from {
-                opacity: 0;
-                transform: translateY(-6px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Items table in form */
-        .items-table-wrap {
-            max-height: 200px;
-            overflow-y: auto;
-            margin-top: 6px;
-            border-radius: var(--radius-sm);
-            border: 1px solid var(--border);
-        }
-        .items-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.82rem;
-        }
-        .items-table thead {
-            position: sticky;
-            top: 0;
-            z-index: 1;
-        }
-        .items-table th {
-            background: #eef1f5;
-            padding: 8px 6px;
-            text-align: left;
-            font-weight: 700;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-            color: var(--text-mid);
-            border-bottom: 2px solid #dde1e7;
-        }
-        .items-table td {
-            padding: 7px 6px;
-            border-bottom: 1px solid #f0f0f0;
-            vertical-align: middle;
-        }
-        .items-table tbody tr:hover {
-            background: #fafcfd;
-        }
-        .text-right {
-            text-align: right;
-        }
-        .text-center {
-            text-align: center;
-        }
-        .text-muted {
-            color: #9ca3af;
-            font-style: italic;
-        }
-
-        /* --- RIGHT PANEL: Preview Struk --- */
-        .panel-preview {
-            flex: 0 0 420px;
-            width: 420px;
-            background: #d5d8dc;
-            display: flex;
-            align-items: flex-start;
-            justify-content: center;
-            padding: 28px 20px;
-            overflow-y: auto;
-            max-height: 88vh;
-            position: relative;
-        }
-        .panel-preview::before {
-            content: '📋 PREVIEW STRUK';
-            position: absolute;
-            top: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 0.7rem;
-            font-weight: 700;
-            letter-spacing: 1.5px;
-            color: #7b7f88;
-            z-index: 0;
-            pointer-events: none;
-        }
-
-        /* The receipt paper */
-        .receipt-wrapper {
-            width: 340px;
-            min-height: 400px;
-            background: #fdfdf8;
-            /* Warna kertas thermal */
-            padding: 22px 18px 28px;
-            font-family: var(--font-mono);
-            font-size: 12.5px;
-            color: #1a1a1a;
-            box-shadow:
-                0 2px 8px rgba(0, 0, 0, 0.18),
-                0 1px 2px rgba(0, 0, 0, 0.1);
-            border-radius: 3px;
-            line-height: 1.55;
-            position: relative;
-            z-index: 1;
-            transition: all 0.2s ease;
-        }
-        /* Sedikit efek kertas */
-        .receipt-wrapper::after {
-            content: '';
-            position: absolute;
-            bottom: 6px;
-            left: 10px;
-            right: 10px;
-            height: 20px;
-            background: repeating-linear-gradient(90deg,
-                    transparent,
-                    transparent 18px,
-                    #e8e8e0 18px,
-                    #e8e8e0 19px);
-            opacity: 0.5;
-            pointer-events: none;
-            border-radius: 0 0 2px 2px;
-        }
-
-        /* Receipt inner content */
-        .receipt-content {
-            text-align: center;
-        }
-        .receipt-content .store-name {
-            font-size: 1.1rem;
-            font-weight: 700;
-            letter-spacing: 0.4px;
-            margin-bottom: 2px;
-            text-transform: uppercase;
-        }
-        .receipt-content .store-addr {
-            font-size: 10.5px;
-            color: #444;
-            margin-bottom: 1px;
-        }
-        .receipt-content .store-telp {
-            font-size: 10.5px;
-            color: #444;
-            margin-bottom: 6px;
-        }
-
-        /* Dashed separator */
-        .dashed-line {
-            border: none;
-            border-top: 1.5px dashed #999;
-            margin: 10px 0;
-            opacity: 0.7;
-        }
-        .dotted-line {
-            border: none;
-            border-top: 1.5px dotted #bbb;
-            margin: 8px 0;
-            opacity: 0.6;
-        }
-
-        /* Receipt table */
-        .receipt-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 11.5px;
-            text-align: left;
-        }
-        .receipt-table th {
-            font-weight: 700;
-            padding: 3px 2px;
-            border-bottom: 1px solid #ccc;
-            font-size: 10.5px;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-        }
-        .receipt-table td {
-            padding: 3px 2px;
-            vertical-align: top;
-        }
-        .receipt-table .col-item {
-            text-align: left;
-            width: 40%;
-        }
-        .receipt-table .col-qty {
-            text-align: center;
-            width: 15%;
-        }
-        .receipt-table .col-price {
-            text-align: right;
-            width: 20%;
-        }
-        .receipt-table .col-total {
-            text-align: right;
-            width: 25%;
-            font-weight: 600;
-        }
-
-        /* Summary rows */
-        .receipt-summary {
-            width: 100%;
-            font-size: 11.5px;
-        }
-        .receipt-summary .sum-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 2px 0;
-        }
-        .receipt-summary .sum-row.total-akhir {
-            font-weight: 700;
-            font-size: 13px;
-            border-top: 1.5px solid #333;
-            padding-top: 6px;
-            margin-top: 4px;
-        }
-        .receipt-summary .sum-row.kembalian {
-            font-weight: 700;
-            font-size: 12.5px;
-            color: #065f46;
-        }
-        .receipt-summary .sum-row.diskon-row {
-            color: #b91c1c;
-        }
-
-        .receipt-footer {
-            text-align: center;
-            font-size: 11px;
-            margin-top: 8px;
-            color: #444;
-        }
-        .receipt-footer .thanks {
-            font-weight: 600;
-            font-size: 12px;
-        }
-        .cut-line {
-            text-align: center;
-            font-size: 9px;
-            color: #999;
-            letter-spacing: 2px;
-            margin-top: 14px;
-        }
-
-        /* Template-specific receipt styles */
-        .receipt-wrapper.template-minimarket {
-            font-size: 11.5px;
-            letter-spacing: 0.1px;
-            background: #fffff8;
-            text-transform: uppercase;
-        }
-        .receipt-wrapper.template-minimarket .store-name {
-            font-size: 1rem;
-            letter-spacing: 1px;
-        }
-        .receipt-wrapper.template-apotek {
-            background: #f9faf7;
-        }
-        .receipt-wrapper.template-rumahmakan {
-            background: #fefdf9;
-        }
-
-        /* Print button area */
-        .print-btn-area {
-            margin-top: 10px;
-            text-align: center;
-        }
-
-        /* ==================== MEDIA PRINT ==================== */
-        @media print {
-            /* Sembunyikan SEMUA kecuali area struk */
-            body {
-                background: #fff !important;
-                margin: 0;
-                padding: 0;
-                display: block;
-            }
-            .app-container {
-                display: block !important;
-                box-shadow: none !important;
-                border-radius: 0 !important;
-                max-width: 100% !important;
-                min-height: auto !important;
-                background: #fff !important;
-            }
-            /* Panel input & elemen non-struk disembunyikan */
-            .panel-input,
-            .panel-preview::before,
-            .print-btn-area,
-            .btn,
-            .app-container>.panel-input {
-                display: none !important;
-            }
-            /* Panel preview melebar penuh */
-            .panel-preview {
-                flex: 1 1 100% !important;
-                width: 100% !important;
-                max-width: 100% !important;
-                padding: 8px !important;
-                background: #fff !important;
-                display: block !important;
-                max-height: none !important;
-                overflow-y: visible !important;
-            }
-            /* Receipt wrapper menjadi pusat halaman */
-            .receipt-wrapper {
-                width: 320px !important;
-                margin: 0 auto !important;
-                box-shadow: none !important;
-                border-radius: 0 !important;
-                background: #fffdf7 !important;
-                padding: 16px 14px 22px !important;
-                page-break-inside: avoid;
-            }
-            .receipt-wrapper::after {
-                display: none !important;
-            }
-            @page {
-                margin: 8mm;
-                size: auto;
-            }
-        }
-
-        /* ==================== RESPONSIVE ==================== */
-        @media (max-width: 900px) {
-            .app-container {
-                flex-direction: column;
-                max-width: 100%;
-                min-height: auto;
-                border-radius: 10px;
-            }
-            .panel-input {
-                flex: 1 1 auto;
-                max-height: none;
-                border-right: none;
-                border-bottom: 1px solid var(--border);
-                padding: 16px 14px;
-            }
-            .panel-preview {
-                flex: 0 0 auto;
-                width: 100%;
-                max-height: none;
-                padding: 20px 10px;
-            }
-            .receipt-wrapper {
-                width: 90%;
-                max-width: 340px;
-            }
-        }
-        @media (max-width: 480px) {
-            .form-row {
-                flex-direction: column;
-                gap: 6px;
-            }
-            .form-group {
-                min-width: 100%;
-            }
-            .receipt-wrapper {
-                width: 95%;
-                padding: 14px 10px 20px;
-                font-size: 11px;
-            }
-            .receipt-table {
-                font-size: 10px;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-    <!-- ==================== MAIN CONTAINER ==================== -->
     <div class="app-container">
-
-        <!-- ==================== PANEL INPUT (KIRI) ==================== -->
+        <!-- Panel Input (Kiri) -->
         <div class="panel-input" id="panelInput">
             <div>
                 <h2>🧾 Generator Struk Kasir</h2>
                 <p class="subtitle">Isi data di bawah, preview struk akan tampil real-time di sebelah kanan.</p>
             </div>
 
-            <!-- A. PILIHAN TEMPLATE -->
+            <!-- Pilihan Template -->
             <div class="section-card">
                 <h3>📐 Pilih Template Struk</h3>
                 <div class="form-row">
                     <div class="form-group" style="flex:1 1 250px;">
                         <label for="templateSelect">Format Struk</label>
-                        <select id="templateSelect" onchange="onTemplateChange()">
+                        <select id="templateSelect">
                             <option value="umum">1. Struk Umum (Standar)</option>
                             <option value="rumahmakan">2. Rumah Makan (+ Nomor Meja & Nama Pelanggan)</option>
                             <option value="minimarket">3. Mini Market (Thermal Monospace Kaku)</option>
@@ -615,113 +31,111 @@
                 </div>
             </div>
 
-            <!-- B1. INFORMASI TOKO -->
+            <!-- Informasi Toko -->
             <div class="section-card">
                 <h3>🏪 Informasi Toko</h3>
                 <div class="form-row">
                     <div class="form-group" style="flex:1 1 200px;">
                         <label for="namaToko">Nama Toko *</label>
-                        <input type="text" id="namaToko" placeholder="Contoh: Toko Berkah Jaya" value="Toko Berkah Jaya" oninput="updatePreview()">
+                        <input type="text" id="namaToko" placeholder="Contoh: Toko Berkah Jaya" value="Toko Berkah Jaya">
                     </div>
                     <div class="form-group" style="flex:1 1 140px;">
                         <label for="telpToko">Nomor Telepon</label>
-                        <input type="text" id="telpToko" placeholder="Contoh: (021) 1234567" value="(021) 555-7890" oninput="updatePreview()">
+                        <input type="text" id="telpToko" placeholder="Contoh: (021) 1234567" value="(021) 555-7890">
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group" style="flex:1 1 100%;">
                         <label for="alamatToko">Alamat Toko</label>
-                        <input type="text" id="alamatToko" placeholder="Contoh: Jl. Merdeka No. 45, Jakarta" value="Jl. Merdeka No. 45, Jakarta Pusat" oninput="updatePreview()">
+                        <input type="text" id="alamatToko" placeholder="Contoh: Jl. Merdeka No. 45, Jakarta" value="Jl. Merdeka No. 45, Jakarta Pusat">
                     </div>
                 </div>
             </div>
 
-            <!-- B2. WAKTU TRANSAKSI -->
+            <!-- Waktu Transaksi -->
             <div class="section-card">
                 <h3>📅 Waktu Transaksi</h3>
                 <div class="form-row">
                     <div class="form-group" style="flex:1 1 130px;">
                         <label for="tanggalTransaksi">Tanggal</label>
-                        <input type="date" id="tanggalTransaksi" oninput="updatePreview()">
+                        <input type="date" id="tanggalTransaksi">
                     </div>
                     <div class="form-group" style="flex:1 1 110px;">
                         <label for="jamTransaksi">Jam</label>
-                        <input type="time" id="jamTransaksi" step="1" oninput="updatePreview()">
+                        <input type="time" id="jamTransaksi" step="1">
                     </div>
                     <div class="form-group" style="flex:0 0 auto; align-self: flex-end;">
-                        <button class="btn btn-outline btn-sm" onclick="autoFillWaktu()" title="Isi dengan waktu saat ini">
+                        <button class="btn btn-outline btn-sm" id="btnAutoFill" title="Isi dengan waktu saat ini">
                             ⏱ Auto-Fill Sekarang
                         </button>
                     </div>
                 </div>
             </div>
 
-            <!-- B3. INFORMASI TRANSAKSI -->
+            <!-- Informasi Transaksi -->
             <div class="section-card">
                 <h3>🧾 Informasi Transaksi</h3>
                 <div class="form-row">
                     <div class="form-group" style="flex:1 1 160px;">
                         <label for="nomorStruk">Nomor Struk / Resi</label>
-                        <input type="text" id="nomorStruk" placeholder="Contoh: INV-20260501-001" value="INV-20260501-001" oninput="updatePreview()">
+                        <input type="text" id="nomorStruk" placeholder="Contoh: INV-20260501-001" value="INV-20260501-001">
                     </div>
                     <div class="form-group" style="flex:1 1 140px;">
                         <label for="namaKasir">Nama Kasir</label>
-                        <input type="text" id="namaKasir" placeholder="Contoh: Budi Santoso" value="Budi Santoso" oninput="updatePreview()">
+                        <input type="text" id="namaKasir" placeholder="Contoh: Budi Santoso" value="Budi Santoso">
                     </div>
                 </div>
 
-                <!-- Template-specific fields (ditampilkan sesuai pilihan template) -->
-                <!-- Rumah Makan -->
+                <!-- Field khusus Rumah Makan -->
                 <div class="template-fields" id="fieldsRumahMakan">
                     <div class="form-row">
                         <div class="form-group" style="flex:1 1 120px;">
                             <label for="nomorMeja">Nomor Meja</label>
-                            <input type="text" id="nomorMeja" placeholder="Contoh: Meja 5" value="Meja 5" oninput="updatePreview()">
+                            <input type="text" id="nomorMeja" placeholder="Contoh: Meja 5" value="Meja 5">
                         </div>
                         <div class="form-group" style="flex:1 1 160px;">
                             <label for="namaPelanggan">Nama Pelanggan</label>
-                            <input type="text" id="namaPelanggan" placeholder="Contoh: Ibu Ani" value="Ibu Ani" oninput="updatePreview()">
+                            <input type="text" id="namaPelanggan" placeholder="Contoh: Ibu Ani" value="Ibu Ani">
                         </div>
                     </div>
                 </div>
-                <!-- Apotek -->
+
+                <!-- Field khusus Apotek -->
                 <div class="template-fields" id="fieldsApotek">
                     <div class="form-row">
                         <div class="form-group" style="flex:1 1 150px;">
                             <label for="sipaSipb">SIPA / SIPB</label>
-                            <input type="text" id="sipaSipb" placeholder="Contoh: SIPA-2025/XYZ/00123" value="SIPA-2025/JKT/00891" oninput="updatePreview()">
+                            <input type="text" id="sipaSipb" placeholder="Contoh: SIPA-2025/XYZ/00123" value="SIPA-2025/JKT/00891">
                         </div>
                         <div class="form-group" style="flex:1 1 160px;">
                             <label for="namaApoteker">Nama Apoteker</label>
-                            <input type="text" id="namaApoteker" placeholder="Contoh: apt. Dewi Lestari, S.Farm." value="apt. Dewi Lestari, S.Farm." oninput="updatePreview()">
+                            <input type="text" id="namaApoteker" placeholder="Contoh: apt. Dewi Lestari, S.Farm." value="apt. Dewi Lestari, S.Farm.">
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- B4. INPUT ITEM BARANG (DINAMIS) -->
+            <!-- Input Item Barang -->
             <div class="section-card">
                 <h3>🛒 Item Barang</h3>
                 <div class="form-row">
                     <div class="form-group" style="flex:2 1 180px;">
                         <label for="itemNama">Nama Item</label>
-                        <input type="text" id="itemNama" placeholder="Contoh: Beras Premium 5kg" onkeydown="if(event.key==='Enter')tambahItem()">
+                        <input type="text" id="itemNama" placeholder="Contoh: Beras Premium 5kg">
                     </div>
                     <div class="form-group" style="flex:0.7 1 70px;">
                         <label for="itemQty">Jumlah (Qty)</label>
-                        <input type="number" id="itemQty" min="1" value="1" placeholder="1" onkeydown="if(event.key==='Enter')tambahItem()">
+                        <input type="number" id="itemQty" min="1" value="1" placeholder="1">
                     </div>
                     <div class="form-group" style="flex:1 1 120px;">
                         <label for="itemHarga">Harga Satuan (Rp)</label>
-                        <input type="number" id="itemHarga" min="0" placeholder="10000" onkeydown="if(event.key==='Enter')tambahItem()">
+                        <input type="number" id="itemHarga" min="0" placeholder="10000">
                     </div>
                     <div class="form-group" style="flex:0 0 auto; align-self: flex-end;">
-                        <button class="btn btn-primary" onclick="tambahItem()">
-                            ➕ Tambah Item
-                        </button>
+                        <button class="btn btn-primary" id="btnTambahItem">➕ Tambah Item</button>
                     </div>
                 </div>
-                <!-- Daftar item yang sudah ditambahkan -->
+                <!-- Tabel daftar item -->
                 <div class="items-table-wrap" id="itemsTableWrap">
                     <table class="items-table" id="itemsTable">
                         <thead>
@@ -734,15 +148,13 @@
                                 <th style="width:9%;" class="text-center">Aksi</th>
                             </tr>
                         </thead>
-                        <tbody id="itemsTableBody">
-                            <!-- Item default untuk demo -->
-                        </tbody>
+                        <tbody id="itemsTableBody"></tbody>
                     </table>
                 </div>
-                <p class="text-muted" style="font-size:0.72rem; margin-top:4px;" id="emptyItemsMsg">Belum ada item. Silakan tambahkan item barang.</p>
+                <p class="text-muted" style="font-size:0.72rem; margin-top:4px;" id="emptyItemsMsg">Belum ada item.</p>
             </div>
 
-            <!-- B5. PERHITUNGAN -->
+            <!-- Perhitungan -->
             <div class="section-card">
                 <h3>💰 Perhitungan</h3>
                 <div class="form-row">
@@ -752,18 +164,18 @@
                     </div>
                     <div class="form-group" style="flex:0.8 1 100px;">
                         <label for="diskonTipe">Tipe Diskon</label>
-                        <select id="diskonTipe" onchange="updatePreview()">
+                        <select id="diskonTipe">
                             <option value="persen">Persentase (%)</option>
                             <option value="nominal">Nominal (Rp)</option>
                         </select>
                     </div>
                     <div class="form-group" style="flex:1 1 120px;">
                         <label for="diskonValue">Diskon</label>
-                        <input type="number" id="diskonValue" min="0" value="0" placeholder="0" oninput="updatePreview()">
+                        <input type="number" id="diskonValue" min="0" value="0" placeholder="0">
                     </div>
                     <div class="form-group" style="flex:0.7 1 90px;">
                         <label for="ppnValue">PPN (%)</label>
-                        <input type="number" id="ppnValue" min="0" max="100" value="11" placeholder="11" oninput="updatePreview()">
+                        <input type="number" id="ppnValue" min="0" max="100" value="11" placeholder="11">
                     </div>
                 </div>
                 <div class="form-row">
@@ -773,7 +185,7 @@
                     </div>
                     <div class="form-group" style="flex:1 1 150px;">
                         <label for="uangTunai">Uang Tunai (Pembayaran)</label>
-                        <input type="number" id="uangTunai" min="0" value="0" placeholder="0" oninput="updatePreview()">
+                        <input type="number" id="uangTunai" min="0" value="0" placeholder="0">
                     </div>
                     <div class="form-group" style="flex:1 1 140px;">
                         <label>Uang Kembalian</label>
@@ -784,503 +196,22 @@
 
             <!-- Tombol Cetak -->
             <div class="print-btn-area">
-                <button class="btn btn-success" onclick="cetakStruk()" style="font-size:1rem; padding:12px 28px;">
+                <button class="btn btn-success" id="btnCetak" style="font-size:1rem; padding:12px 28px;">
                     🖨️ Cetak Struk
                 </button>
             </div>
         </div>
 
-        <!-- ==================== PANEL PREVIEW STRUK (KANAN) ==================== -->
+        <!-- Panel Preview (Kanan) -->
         <div class="panel-preview" id="panelPreview">
             <div class="receipt-wrapper" id="receiptWrapper">
                 <div class="receipt-content" id="receiptContent">
-                    <!-- Konten struk akan di-generate oleh JavaScript -->
+                    <!-- Konten struk akan dimasukkan oleh JavaScript -->
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- ==================== JAVASCRIPT ==================== -->
-    <script>
-        (function() {
-            // ========== STATE: Array untuk menyimpan item barang ==========
-            let items = [];
-
-            /**
-             * Format angka ke string Rupiah (Rp X.XXX)
-             * @param {number} num - Angka yang akan diformat
-             * @returns {string} String terformat, contoh: "Rp 150.000"
-             */
-            function formatRupiah(num) {
-                if (isNaN(num) || num === null) num = 0;
-                return 'Rp ' + Math.round(num).toLocaleString('id-ID');
-            }
-
-            /**
-             * Format angka biasa dengan pemisah ribuan (tanpa "Rp")
-             * @param {number} num
-             * @returns {string} Contoh: "150.000"
-             */
-            function formatNumber(num) {
-                if (isNaN(num) || num === null) num = 0;
-                return Math.round(num).toLocaleString('id-ID');
-            }
-
-            /**
-             * Format tanggal dari input date (YYYY-MM-DD) ke DD/MM/YYYY
-             * @param {string} dateStr - Format YYYY-MM-DD
-             * @returns {string} Format DD/MM/YYYY
-             */
-            function formatTanggal(dateStr) {
-                if (!dateStr) return '__/__/____';
-                const parts = dateStr.split('-');
-                if (parts.length === 3) {
-                    return parts[2] + '/' + parts[1] + '/' + parts[0];
-                }
-                return dateStr;
-            }
-
-            // ========== DOM REFERENSI ==========
-            const templateSelect = document.getElementById('templateSelect');
-            const fieldsRumahMakan = document.getElementById('fieldsRumahMakan');
-            const fieldsApotek = document.getElementById('fieldsApotek');
-            const receiptWrapper = document.getElementById('receiptWrapper');
-            const receiptContent = document.getElementById('receiptContent');
-            const itemsTableBody = document.getElementById('itemsTableBody');
-            const emptyItemsMsg = document.getElementById('emptyItemsMsg');
-            const itemsTableWrap = document.getElementById('itemsTableWrap');
-            const subtotalDisplay = document.getElementById('subtotalDisplay');
-            const totalAkhirDisplay = document.getElementById('totalAkhirDisplay');
-            const kembalianDisplay = document.getElementById('kembalianDisplay');
-
-            // ========== FUNGSI MENAMBAH ITEM ==========
-            /**
-             * Menambahkan item baru ke keranjang dari input form
-             */
-            window.tambahItem = function() {
-                const namaInput = document.getElementById('itemNama');
-                const qtyInput = document.getElementById('itemQty');
-                const hargaInput = document.getElementById('itemHarga');
-
-                const nama = namaInput.value.trim();
-                const qty = parseInt(qtyInput.value);
-                const harga = parseFloat(hargaInput.value);
-
-                // Validasi
-                if (!nama) {
-                    alert('⚠️ Nama item tidak boleh kosong!');
-                    namaInput.focus();
-                    return;
-                }
-                if (isNaN(qty) || qty <= 0) {
-                    alert('⚠️ Jumlah (Qty) harus berupa angka positif!');
-                    qtyInput.focus();
-                    return;
-                }
-                if (isNaN(harga) || harga < 0) {
-                    alert('⚠️ Harga satuan harus berupa angka (minimal 0)!');
-                    hargaInput.focus();
-                    return;
-                }
-
-                // Tambahkan ke array items
-                items.push({
-                    nama: nama,
-                    qty: qty,
-                    harga: harga
-                });
-
-                // Reset input
-                namaInput.value = '';
-                qtyInput.value = '1';
-                hargaInput.value = '';
-                namaInput.focus();
-
-                // Update tampilan
-                renderItemsTable();
-                updatePreview();
-            };
-
-            /**
-             * Menghapus item dari keranjang berdasarkan index
-             * @param {number} index - Indeks item dalam array
-             */
-            window.hapusItem = function(index) {
-                if (index >= 0 && index < items.length) {
-                    items.splice(index, 1);
-                    renderItemsTable();
-                    updatePreview();
-                }
-            };
-
-            /**
-             * Merender tabel item di panel input
-             */
-            function renderItemsTable() {
-                itemsTableBody.innerHTML = '';
-
-                if (items.length === 0) {
-                    emptyItemsMsg.style.display = 'block';
-                    itemsTableWrap.style.display = 'none';
-                } else {
-                    emptyItemsMsg.style.display = 'none';
-                    itemsTableWrap.style.display = 'block';
-
-                    items.forEach((item, i) => {
-                        const totalItem = item.qty * item.harga;
-                        const tr = document.createElement('tr');
-                        tr.innerHTML = `
-                                <td class="text-center">${i + 1}</td>
-                                <td>${escapeHTML(item.nama)}</td>
-                                <td class="text-center">${item.qty}</td>
-                                <td class="text-right">${formatRupiah(item.harga)}</td>
-                                <td class="text-right"><strong>${formatRupiah(totalItem)}</strong></td>
-                                <td class="text-center">
-                                    <button class="btn btn-danger" onclick="hapusItem(${i})" title="Hapus item ini">✕</button>
-                                </td>
-                            `;
-                        itemsTableBody.appendChild(tr);
-                    });
-                }
-            }
-
-            /**
-             * Escape karakter HTML untuk mencegah XSS
-             * @param {string} str
-             * @returns {string}
-             */
-            function escapeHTML(str) {
-                const div = document.createElement('div');
-                div.textContent = str;
-                return div.innerHTML;
-            }
-
-            // ========== FUNGSI AUTO-FILL WAKTU ==========
-            /**
-             * Mengisi input tanggal dan jam dengan waktu saat ini
-             */
-            window.autoFillWaktu = function() {
-                const now = new Date();
-                const tahun = now.getFullYear();
-                const bulan = String(now.getMonth() + 1).padStart(2, '0');
-                const hari = String(now.getDate()).padStart(2, '0');
-                const jam = String(now.getHours()).padStart(2, '0');
-                const menit = String(now.getMinutes()).padStart(2, '0');
-                const detik = String(now.getSeconds()).padStart(2, '0');
-
-                document.getElementById('tanggalTransaksi').value = `${tahun}-${bulan}-${hari}`;
-                document.getElementById('jamTransaksi').value = `${jam}:${menit}:${detik}`;
-                updatePreview();
-            };
-
-            // ========== FUNGSI PERUBAHAN TEMPLATE ==========
-            /**
-             * Dipanggil saat dropdown template berubah
-             * Menampilkan/menyembunyikan field spesifik template
-             */
-            window.onTemplateChange = function() {
-                const selected = templateSelect.value;
-
-                // Sembunyikan semua field template-specific
-                fieldsRumahMakan.classList.remove('active');
-                fieldsApotek.classList.remove('active');
-
-                // Tampilkan yang sesuai
-                if (selected === 'rumahmakan') {
-                    fieldsRumahMakan.classList.add('active');
-                } else if (selected === 'apotek') {
-                    fieldsApotek.classList.add('active');
-                }
-
-                // Update class receipt wrapper untuk styling template
-                receiptWrapper.classList.remove('template-minimarket', 'template-apotek', 'template-rumahmakan');
-                if (selected === 'minimarket') {
-                    receiptWrapper.classList.add('template-minimarket');
-                } else if (selected === 'apotek') {
-                    receiptWrapper.classList.add('template-apotek');
-                } else if (selected === 'rumahmakan') {
-                    receiptWrapper.classList.add('template-rumahmakan');
-                }
-
-                updatePreview();
-            };
-
-            // ========== FUNGSI PERHITUNGAN ==========
-            /**
-             * Menghitung subtotal, diskon, PPN, total akhir, dan kembalian
-             * @returns {Object} Objek hasil perhitungan
-             */
-            function hitungSemua() {
-                // Hitung subtotal dari semua item
-                const subtotal = items.reduce((sum, item) => sum + (item.qty * item.harga), 0);
-
-                // Ambil nilai diskon
-                const diskonTipe = document.getElementById('diskonTipe').value;
-                const diskonValue = parseFloat(document.getElementById('diskonValue').value) || 0;
-                let diskonNominal = 0;
-                let diskonPersen = 0;
-
-                if (diskonTipe === 'persen') {
-                    diskonPersen = Math.min(diskonValue, 100); // Maks 100%
-                    diskonNominal = subtotal * (diskonPersen / 100);
-                } else {
-                    diskonNominal = Math.min(diskonValue, subtotal); // Diskon nominal tidak boleh melebihi subtotal
-                    diskonPersen = subtotal > 0 ? (diskonNominal / subtotal) * 100 : 0;
-                }
-
-                // Setelah diskon
-                const setelahDiskon = subtotal - diskonNominal;
-
-                // PPN dihitung dari nilai setelah diskon
-                const ppnPersen = parseFloat(document.getElementById('ppnValue').value) || 0;
-                const ppnNominal = setelahDiskon * (ppnPersen / 100);
-
-                // Total akhir
-                const totalAkhir = setelahDiskon + ppnNominal;
-
-                // Uang tunai dan kembalian
-                const uangTunai = parseFloat(document.getElementById('uangTunai').value) || 0;
-                const kembalian = uangTunai - totalAkhir;
-
-                return {
-                    subtotal,
-                    diskonTipe,
-                    diskonPersen,
-                    diskonNominal,
-                    setelahDiskon,
-                    ppnPersen,
-                    ppnNominal,
-                    totalAkhir,
-                    uangTunai,
-                    kembalian
-                };
-            }
-
-            // ========== FUNGSI UPDATE PREVIEW REAL-TIME ==========
-            /**
-             * Fungsi utama untuk memperbarui tampilan struk di panel preview
-             * Dipanggil setiap kali ada perubahan input
-             */
-            window.updatePreview = function() {
-                // Ambil semua nilai dari form
-                const template = templateSelect.value;
-                const namaToko = document.getElementById('namaToko').value.trim() || 'Nama Toko';
-                const alamatToko = document.getElementById('alamatToko').value.trim() || '';
-                const telpToko = document.getElementById('telpToko').value.trim() || '';
-                const tanggalRaw = document.getElementById('tanggalTransaksi').value;
-                const jamRaw = document.getElementById('jamTransaksi').value;
-                const nomorStruk = document.getElementById('nomorStruk').value.trim() || '-';
-                const namaKasir = document.getElementById('namaKasir').value.trim() || '-';
-
-                // Template-specific
-                const nomorMeja = document.getElementById('nomorMeja')?.value.trim() || '';
-                const namaPelanggan = document.getElementById('namaPelanggan')?.value.trim() || '';
-                const sipaSipb = document.getElementById('sipaSipb')?.value.trim() || '';
-                const namaApoteker = document.getElementById('namaApoteker')?.value.trim() || '';
-
-                // Format tanggal & jam
-                const tanggalDisplay = formatTanggal(tanggalRaw);
-                const jamDisplay = jamRaw || '__:__:__';
-
-                // Hitung semua
-                const calc = hitungSemua();
-
-                // Update display perhitungan di form
-                subtotalDisplay.value = formatRupiah(calc.subtotal);
-                totalAkhirDisplay.value = formatRupiah(calc.totalAkhir);
-                kembalianDisplay.value = calc.kembalian >= 0 ? formatRupiah(calc.kembalian) : '⚠️ Uang Kurang';
-
-                // Sesuaikan warna kembalian
-                if (calc.uangTunai > 0 && calc.kembalian < 0) {
-                    kembalianDisplay.style.color = '#ef4444';
-                    kembalianDisplay.style.fontWeight = '700';
-                } else if (calc.uangTunai > 0 && calc.kembalian >= 0) {
-                    kembalianDisplay.style.color = '#065f46';
-                    kembalianDisplay.style.fontWeight = '700';
-                } else {
-                    kembalianDisplay.style.color = '';
-                    kembalianDisplay.style.fontWeight = '';
-                }
-
-                // ========== BUILD RECEIPT HTML ==========
-                let html = '';
-
-                // Header struk
-                html += `<div class="store-name">${escapeHTML(namaToko)}</div>`;
-                if (alamatToko) {
-                    html += `<div class="store-addr">${escapeHTML(alamatToko)}</div>`;
-                }
-                if (telpToko) {
-                    html += `<div class="store-telp">Telp: ${escapeHTML(telpToko)}</div>`;
-                }
-
-                // Template-specific info di header
-                if (template === 'rumahmakan' && (nomorMeja || namaPelanggan)) {
-                    html += `<div style="font-size:11px; margin-top:4px;">`;
-                    if (nomorMeja) html += `🪑 ${escapeHTML(nomorMeja)}`;
-                    if (nomorMeja && namaPelanggan) html += ` | `;
-                    if (namaPelanggan) html += `👤 ${escapeHTML(namaPelanggan)}`;
-                    html += `</div>`;
-                }
-                if (template === 'apotek' && (sipaSipb || namaApoteker)) {
-                    html += `<div style="font-size:10.5px; margin-top:4px;">`;
-                    if (sipaSipb) html += `SIPA/SIPB: ${escapeHTML(sipaSipb)}`;
-                    if (sipaSipb && namaApoteker) html += `<br>`;
-                    if (namaApoteker) html += `Apoteker: ${escapeHTML(namaApoteker)}`;
-                    html += `</div>`;
-                }
-
-                html += `<hr class="dashed-line">`;
-
-                // Info transaksi
-                html +=
-                    `<div style="display:flex; justify-content:space-between; font-size:11px; text-align:left; gap:8px;">`;
-                html += `<span>Tgl: ${tanggalDisplay}</span>`;
-                html += `<span>Jam: ${jamDisplay}</span>`;
-                html += `</div>`;
-                html +=
-                    `<div style="display:flex; justify-content:space-between; font-size:11px; text-align:left; gap:8px; margin-top:1px;">`;
-                html += `<span>No: ${escapeHTML(nomorStruk)}</span>`;
-                html += `<span>Kasir: ${escapeHTML(namaKasir)}</span>`;
-                html += `</div>`;
-
-                html += `<hr class="dashed-line">`;
-
-                // Tabel item
-                if (items.length > 0) {
-                    html += `<table class="receipt-table">`;
-                    html += `<thead><tr>
-                            <th class="col-item">Item</th>
-                            <th class="col-qty">Qty</th>
-                            <th class="col-price">Harga</th>
-                            <th class="col-total">Total</th>
-                        </tr></thead><tbody>`;
-
-                    items.forEach(item => {
-                        const totalItem = item.qty * item.harga;
-                        html += `<tr>
-                                <td class="col-item">${escapeHTML(item.nama)}</td>
-                                <td class="col-qty">${item.qty}</td>
-                                <td class="col-price">${formatNumber(item.harga)}</td>
-                                <td class="col-total">${formatNumber(totalItem)}</td>
-                            </tr>`;
-                    });
-
-                    html += `</tbody></table>`;
-                } else {
-                    html +=
-                        `<div style="text-align:center; color:#999; font-style:italic; padding:10px 0;">(Belum ada item)</div>`;
-                }
-
-                html += `<hr class="dashed-line">`;
-
-                // Ringkasan perhitungan
-                html += `<div class="receipt-summary">`;
-                html +=
-                    `<div class="sum-row"><span>Subtotal</span><span>${formatRupiah(calc.subtotal)}</span></div>`;
-
-                // Tampilkan diskon jika ada
-                if (calc.diskonNominal > 0) {
-                    const diskonLabel = calc.diskonTipe === 'persen' ?
-                        `Diskon (${formatNumber(calc.diskonPersen)}%)` :
-                        `Diskon`;
-                    html +=
-                        `<div class="sum-row diskon-row"><span>${diskonLabel}</span><span>- ${formatRupiah(calc.diskonNominal)}</span></div>`;
-                }
-
-                // Tampilkan PPN jika ada
-                if (calc.ppnPersen > 0) {
-                    html +=
-                        `<div class="sum-row"><span>PPN (${formatNumber(calc.ppnPersen)}%)</span><span>+ ${formatRupiah(calc.ppnNominal)}</span></div>`;
-                }
-
-                html += `<hr class="dotted-line">`;
-                html +=
-                    `<div class="sum-row total-akhir"><span>TOTAL</span><span>${formatRupiah(calc.totalAkhir)}</span></div>`;
-
-                // Tampilkan tunai dan kembalian jika ada input tunai
-                if (calc.uangTunai > 0) {
-                    html +=
-                        `<div class="sum-row"><span>Tunai</span><span>${formatRupiah(calc.uangTunai)}</span></div>`;
-                    const kembalianClass = calc.kembalian >= 0 ? 'kembalian' : 'diskon-row';
-                    const kembalianText = calc.kembalian >= 0 ?
-                        formatRupiah(calc.kembalian) :
-                        '⚠️ Uang Kurang ' + formatRupiah(Math.abs(calc.kembalian));
-                    html +=
-                        `<div class="sum-row ${kembalianClass}"><span>Kembalian</span><span>${kembalianText}</span></div>`;
-                }
-
-                html += `</div>`;
-
-                // Footer
-                html += `<hr class="dashed-line">`;
-                html += `<div class="receipt-footer">`;
-                html += `<div class="thanks">🛍️ Terima Kasih</div>`;
-                html += `<div style="font-size:10px; color:#777;">Barang yang sudah dibeli tidak dapat dikembalikan</div>`;
-                html += `</div>`;
-                html += `<div class="cut-line">-- ✂ -- potong disini -- ✂ --</div>`;
-
-                // Masukkan ke receipt content
-                receiptContent.innerHTML = html;
-            };
-
-            // ========== FUNGSI CETAK STRUK ==========
-            /**
-             * Memicu window.print() untuk mencetak struk
-             * CSS @media print akan otomatis menyembunyikan panel input
-             */
-            window.cetakStruk = function() {
-                // Pastikan preview sudah ter-update
-                updatePreview();
-                // Delay kecil untuk memastikan DOM siap
-                setTimeout(() => {
-                    window.print();
-                }, 150);
-            };
-
-            // ========== INISIALISASI ==========
-            /**
-             * Setup awal saat halaman dimuat
-             */
-            function init() {
-                // Auto-fill waktu saat ini
-                autoFillWaktu();
-
-                // Tambahkan beberapa item default untuk demo
-                items.push({ nama: 'Beras Premium 5kg', qty: 2, harga: 75000 });
-                items.push({ nama: 'Minyak Goreng 2L', qty: 1, harga: 38000 });
-                items.push({ nama: 'Gula Pasir 1kg', qty: 3, harga: 16000 });
-
-                // Render items table
-                renderItemsTable();
-
-                // Set template default
-                onTemplateChange();
-
-                // Update preview pertama kali
-                updatePreview();
-
-                // Set nilai uang tunai default
-                document.getElementById('uangTunai').value = '300000';
-                updatePreview();
-            }
-
-            // Jalankan inisialisasi
-            init();
-
-            // ========== EVENT LISTENER TAMBAHAN UNTUK REAL-TIME ==========
-            // (Sebagian besar sudah menggunakan oninput/onchange inline,
-            //  tapi kita pastikan select juga ter-cover)
-            templateSelect.addEventListener('change', function() {
-                onTemplateChange();
-                updatePreview();
-            });
-
-            console.log('✅ Generator Struk Kasir siap digunakan!');
-            console.log('   - Silakan edit form di panel kiri');
-            console.log('   - Preview struk akan diperbarui real-time di panel kanan');
-            console.log('   - Klik tombol "Cetak Struk" untuk mencetak');
-        })();
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
